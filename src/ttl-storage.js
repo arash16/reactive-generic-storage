@@ -54,7 +54,7 @@ export default function createTtlStore({
       }
       return undefined;
     },
-    set(key, v, ttl) {
+    set(key, v, { ttl }) {
       // third argument could be provided to set default ttl to none
       const actualTtl = +(arguments.length === 3 ? ttl : defaultTtl);
       const e = isFinite(actualTtl) ? Date.now() + actualTtl : undefined;
