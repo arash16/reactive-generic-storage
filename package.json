@@ -1,0 +1,55 @@
+{
+  "version": "1.0.0",
+  "name": "reactive-generic-storage",
+  "description": "Storage wrapper on top of browser storage apis",
+  "author": "Arash Shakery <arash.shakery@gmail.com> (arash16.com)",
+  "license": "MIT",
+  "source": "src/index.js",
+  "main": "lib/rgs.js",
+  "module": "lib/rgs.mjs",
+  "unpkg": "lib/rgs.umd.js",
+  "types": "lib/rgs.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "microbundle build --name rgs",
+    "dev": "microbundle watch --name rgs",
+    "lint": "eslint src __tests__",
+    "lint:fix": "yarn lint --fix",
+    "test": "jest",
+    "prepublish": "yarn build"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-push": "yarn lint"
+    }
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.5",
+    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
+    "@babel/preset-env": "^7.7.6",
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
+    "babel-eslint": "^10.0.2",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-chai-friendly": "^0.5.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "husky": "^4.2.3",
+    "jest": "^25.1.0",
+    "microbundle": "^0.11.0",
+    "prettier": "^2.0.2"
+  }
+}
