@@ -10,21 +10,24 @@ import createMemoryStore from './memory-storage';
 // 3. browser storage apis store values as strings, so writing json and reading back
 //    will result in different object references (after stringify and parsing).
 // 4. there's no notion of namespace for browser storage apis, there exists only storage
+
+function tryParse(val) {
+  try {
+    return val && JSON.parse(val);
+  } catch (e) {}
+  // we expect it to be JSON string
+  // if it's not, return undefined
+  return undefined;
+}
+
 export default function createBrowserStore({
   storageApi,
-  prefix = 'rgs',
+  namespace = 'rgs',
   notify,
+  serialize = JSON.stringify,
+  deserialize = tryParse,
 } = {}) {
-  const keyPrefix = `${prefix}:`;
-
-  function tryParse(val) {
-    try {
-      return val && JSON.parse(val);
-    } catch (e) {}
-    // we expect it to be JSON string
-    // if it's not, return undefined
-    return undefined;
-  }
+  const keyPrefix = `${namespace}:`;
 
   // if internal is changed, we update LS and notify outer
   const internalMemoryStore = createMemoryStore({
@@ -32,7 +35,7 @@ export default function createBrowserStore({
       if (newValue === undefined) {
         storageApi.removeItem(keyPrefix + key);
       } else {
-        storageApi.setItem(keyPrefix + key, JSON.stringify(newValue));
+        storageApi.setItem(keyPrefix + key, serialize(newValue));
       }
       notify({ key, oldValue, newValue });
     },
@@ -43,7 +46,7 @@ export default function createBrowserStore({
     if (key.startsWith(keyPrefix)) {
       internalMemoryStore.set(
         key.substring(keyPrefix.length),
-        tryParse(storageApi.getItem(key))
+        deserialize(storageApi.getItem(key))
       );
     }
   }
@@ -60,7 +63,7 @@ export default function createBrowserStore({
       if (newValue == null) {
         internalMemoryStore.remove(actualKey);
       } else {
-        internalMemoryStore.set(actualKey, tryParse(newValue));
+        internalMemoryStore.set(actualKey, deserialize(newValue));
       }
     }
   };
