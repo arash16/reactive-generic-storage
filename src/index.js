@@ -50,10 +50,10 @@ export default function createStore({
       if (!key) {
         // remove listeners for all keys
         Object.keys(listeners).keys.forEach(this.off);
-      } else if (!handler || !listeners[key]) {
+      } else if (!handler) {
         // remove all listeners for a specific key
         delete listeners[key];
-      } else {
+      } else if (!listeners[key]) {
         // remove a specific listener for a specific key
         listeners[key] = listeners[key].filter(x => x !== handler);
       }
