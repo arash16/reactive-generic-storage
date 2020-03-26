@@ -74,11 +74,7 @@ export default function createBrowserStore({
 
   // everything else works directly with internal storage
   return {
-    get: internalMemoryStore.get,
-    set: internalMemoryStore.set,
-    remove: internalMemoryStore.remove,
-    clear: internalMemoryStore.clear,
-    keys: internalMemoryStore.keys,
+    ...internalMemoryStore,
     destroy() {
       window.removeEventListener('storage', storageHandler);
     },

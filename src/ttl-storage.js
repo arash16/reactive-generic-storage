@@ -9,7 +9,7 @@ export default function createTtlStore({
   notify,
   ...storeOptions
 }) {
-  const store = createStore({
+  const internalStore = createStore({
     ...storeOptions,
     notify({ key, oldValue = {}, newValue = {} }) {
       notify({
@@ -25,7 +25,7 @@ export default function createTtlStore({
     if (!timers[key]) {
       timers[key] = setTimeout(() => {
         delete timers[key];
-        store.remove(key);
+        internalStore.remove(key);
       }, ttl);
     }
   }
@@ -38,13 +38,14 @@ export default function createTtlStore({
   }
 
   const ttlStore = {
+    ...internalStore,
     get(key) {
-      const ev = store.get(key);
+      const ev = internalStore.get(key);
       if (ev) {
         const { e, v } = ev;
         if (e < Date.now()) {
           // when e is not a number, this is not executed
-          store.remove(key);
+          internalStore.remove(key);
         } else {
           if (isFinite(e)) {
             scheduleRemove(key, e - Date.now());
@@ -58,7 +59,7 @@ export default function createTtlStore({
       // third argument could be provided to set default ttl to none
       const actualTtl = +(arguments.length === 3 ? ttl : defaultTtl);
       const e = isFinite(actualTtl) ? Date.now() + actualTtl : undefined;
-      store.set(key, { e, v });
+      internalStore.set(key, { e, v });
 
       if (isFinite(actualTtl)) {
         scheduleRemove(key, actualTtl);
@@ -68,11 +69,8 @@ export default function createTtlStore({
     },
     remove(key) {
       clearSchedule(key);
-      store.remove(key);
+      internalStore.remove(key);
     },
-    clear: store.clear,
-    keys: store.keys,
-    destroy: store.destroy,
   };
 
   // make sure everything initialized is scheduled to be removed

@@ -30,10 +30,7 @@ export default function createStore({
   });
 
   return {
-    get: store.get,
-    set: store.set,
-    remove: store.remove,
-    clear: store.clear,
+    ...store,
     destroy() {
       this.off();
       store.destroy();
