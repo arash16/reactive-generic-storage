@@ -54,7 +54,7 @@ export default function createStore({
     off(key, handler) {
       if (!key) {
         // remove listeners for all keys
-        Object.keys(listeners).keys.forEach(this.off);
+        Object.keys(listeners).forEach(this.off);
       } else if (!handler) {
         if (typeof key === 'function') {
           // remove listener of all keys

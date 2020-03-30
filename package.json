@@ -1,5 +1,5 @@
 {
-  "version": "1.2.3",
+  "version": "1.2.4",
   "name": "reactive-generic-storage",
   "description": "Storage wrapper on top of browser storage apis",
   "author": "Arash Shakery <arash.shakery@gmail.com> (arash16.com)",
